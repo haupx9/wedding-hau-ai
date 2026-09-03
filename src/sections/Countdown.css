@@ -1,0 +1,97 @@
+/* ============================================================
+   ĐẾM NGƯỢC TỚI NGÀY CƯỚI
+   ============================================================ */
+
+.countdown {
+  text-align: center;
+  overflow: hidden;
+}
+
+.countdown__grid {
+  display: grid;
+  /* Mobile 2 cột cho khỏi tràn ngang, màn rộng hơn thì 4 cột */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2.5vw, 1.5rem);
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 620px) {
+  .countdown__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.countdown__box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: clamp(1.1rem, 3.5vw, 1.75rem) 0.5rem;
+  background: var(--white);
+  border: 1px solid var(--blush-100);
+  border-radius: var(--radius);
+}
+
+/* Khung vàng mảnh lùi vào trong, tạo cảm giác viền kép của thiệp cưới */
+.countdown__box::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--gold);
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.countdown__value {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
+  line-height: 1;
+  color: var(--rose-deep);
+  font-variant-numeric: tabular-nums;
+  /* Số giây đổi liên tục, dùng bề rộng chữ số cố định để khỏi giật */
+  font-feature-settings: 'tnum' 1;
+}
+
+.countdown__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+[lang='ja'] .countdown__label {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+}
+
+/* Thông điệp thay thế khi đã tới/qua ngày cưới */
+.countdown__finished {
+  max-width: 34ch;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 5vw, 2.5rem) 1.25rem;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3.4vw, 1.6rem);
+  line-height: 1.5;
+  color: var(--rose-deep);
+}
+
+.countdown__date {
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+[lang='ja'] .countdown__date {
+  text-transform: none;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,79 @@
+/* ============================================================
+   BẢN ĐỒ ĐƯỜNG ĐI
+   ============================================================ */
+
+.map__layout {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .map__layout {
+    /* Bản đồ chiếm phần lớn, khối thông tin nằm gọn bên phải */
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+/* Khung bản đồ phải có chiều cao xác định NGAY từ đầu: thư viện bản đồ
+   của OpenStreetMap đo kích thước khung một lần lúc tải, nếu để chiều
+   cao tự co giãn thì bản đồ sẽ hiện bé xíu ở một góc. */
+.map__frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--blush-100);
+  border-radius: var(--radius);
+  background: var(--blush-50);
+  height: clamp(300px, 62vw, 380px);
+}
+
+.map__iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (min-width: 900px) {
+  .map__frame {
+    height: 460px;
+  }
+}
+
+/* ---------- Khối thông tin địa điểm ---------- */
+.map__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(1.6rem, 4vw, 2.5rem);
+  background: var(--white);
+  border: 1px solid var(--blush-100);
+  border-radius: var(--radius);
+}
+
+.map__venue {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3.4vw, 1.7rem);
+  letter-spacing: 0.05em;
+  color: var(--rose-deep);
+}
+
+.map__rule {
+  display: block;
+  width: 46px;
+  height: 1px;
+  margin: 1rem 0 1.1rem;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.map__address {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+}
+
+.map__cta {
+  align-self: flex-start;
+}

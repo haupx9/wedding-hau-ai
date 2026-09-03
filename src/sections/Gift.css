@@ -1,0 +1,111 @@
+/* ============================================================
+   MỪNG CƯỚI — hai thẻ tài khoản
+   ============================================================ */
+
+.gift__grid {
+  display: grid;
+  gap: clamp(1.1rem, 3vw, 1.75rem);
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 720px) {
+  .gift__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gift__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.25rem, 3vw, 2rem);
+  background: var(--white);
+  border: 1px solid var(--blush-100);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 34px rgba(74, 61, 58, 0.06);
+}
+
+.gift__mark {
+  flex: none;
+  margin-bottom: 0.9rem;
+}
+
+.gift__side {
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  color: var(--rose-deep);
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Mã QR ---------- */
+.gift__qr,
+.gift__qr-pending {
+  width: clamp(9rem, 40vw, 11.5rem);
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius);
+  margin-bottom: 1.4rem;
+}
+
+.gift__qr {
+  object-fit: contain;
+  background: var(--white);
+  border: 1px solid var(--blush-100);
+  padding: 0.5rem;
+}
+
+/* Khung nét đứt chờ dán ảnh QR thật vào sau */
+.gift__qr-pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px dashed var(--blush-200);
+  background: var(--blush-50);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ---------- Danh sách thông tin ---------- */
+.gift__info {
+  margin: 0 0 1.5rem;
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+}
+
+.gift__info dt {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.7rem;
+}
+
+[lang='ja'] .gift__info dt {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+}
+
+.gift__info dd {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+
+/* Số tài khoản: chữ to, giãn đều để dễ đọc và dễ đối chiếu */
+.gift__number {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 4vw, 1.4rem);
+  letter-spacing: 0.14em;
+  color: var(--rose-deep);
+  word-break: break-all;
+}
+
+.gift__copy {
+  margin-top: auto;
+}

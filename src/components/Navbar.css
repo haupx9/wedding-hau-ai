@@ -1,0 +1,264 @@
+/* ============================================================
+   THANH ĐIỀU HƯỚNG CỐ ĐỊNH
+   Trong suốt khi còn ở Hero, chuyển nền kem khi cuộn quá 80px.
+   ============================================================ */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  color: var(--white);
+  transition: background-color 0.4s var(--ease), box-shadow 0.4s var(--ease),
+    color 0.4s var(--ease);
+}
+
+.nav--solid {
+  background: rgba(253, 249, 246, 0.94);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 18px rgba(74, 61, 58, 0.09);
+  color: var(--ink);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 64px;
+  padding-block: 0.5rem;
+}
+
+/* Anchor cuộn tới không bị thanh menu che mất tiêu đề */
+section[id] {
+  scroll-margin-top: 76px;
+}
+
+/* ---------- Tên cặp đôi bên trái ---------- */
+.nav__brand {
+  font-family: var(--font-script);
+  font-size: clamp(1.1rem, 4.4vw, 1.7rem);
+  color: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  /* Tên dài (nhất là bản tiếng Nhật) thì co lại và cắt bớt,
+     tuyệt đối không được đẩy nút menu ra ngoài màn hình */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 10px rgba(58, 42, 40, 0.28);
+}
+
+.nav--solid .nav__brand {
+  color: var(--rose-deep);
+  text-shadow: none;
+}
+
+/* ---------- Menu ngang (desktop) ---------- */
+.nav__desktop {
+  display: none;
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2rem);
+}
+
+.nav__link {
+  position: relative;
+  color: inherit;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-block: 0.35rem;
+  white-space: nowrap;
+  text-shadow: 0 1px 10px rgba(58, 42, 40, 0.3);
+  transition: color 0.3s var(--ease);
+}
+
+.nav--solid .nav__link {
+  text-shadow: none;
+}
+
+/* Gạch chân mảnh chạy ra từ giữa khi rê chuột */
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transform: translateX(-50%);
+  transition: width 0.35s var(--ease);
+}
+
+.nav__link:hover::after {
+  width: 100%;
+}
+
+.nav--solid .nav__link:hover {
+  color: var(--rose-deep);
+}
+
+/* Chữ Nhật không viết hoa và cần giãn chữ hẹp hơn */
+[lang='ja'] .nav__link,
+[lang='ja'] .nav__panel-link {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.86rem;
+}
+
+/* ---------- Cụm bên phải ---------- */
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+
+/* Màn hình rất hẹp: thu nhỏ nút đổi ngôn ngữ cho vừa một hàng */
+@media (max-width: 480px) {
+  .nav__inner {
+    gap: 0.5rem;
+  }
+
+  .nav__lang {
+    padding-inline: 0.3rem;
+  }
+
+  .nav__lang .lang-toggle__btn {
+    padding-inline: 0.35rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ---------- Nút hamburger ---------- */
+.nav__burger {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0 9px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.nav__burger-bar {
+  display: block;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.35s var(--ease), opacity 0.25s var(--ease);
+}
+
+/* Ba vạch biến thành dấu X khi menu đang mở */
+.nav__burger.is-open .nav__burger-bar:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.nav__burger.is-open .nav__burger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__burger.is-open .nav__burger-bar:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* ---------- Lớp nền mờ sau panel ---------- */
+.nav__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(58, 42, 40, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
+}
+
+.nav__backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- Panel trượt (mobile) ---------- */
+.nav__panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(82vw, 320px);
+  padding: 5.5rem 1.75rem 2rem;
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: -14px 0 40px rgba(74, 61, 58, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.42s var(--ease), visibility 0.42s var(--ease);
+  overflow-y: auto;
+}
+
+.nav__panel.is-open {
+  transform: none;
+  visibility: visible;
+}
+
+.nav__panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nav__panel-link {
+  display: block;
+  padding: 0.7rem 0;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--blush-100);
+  transition: color 0.3s var(--ease), padding-left 0.3s var(--ease);
+}
+
+.nav__panel-link:hover {
+  color: var(--rose-deep);
+  padding-left: 0.4rem;
+}
+
+.nav__panel-lang {
+  align-self: flex-start;
+  border-color: var(--blush-200);
+  color: var(--ink);
+}
+
+/* ---------- Từ 900px trở lên: hiện menu ngang, ẩn hamburger ---------- */
+@media (min-width: 900px) {
+  .nav__desktop {
+    display: block;
+  }
+
+  .nav__burger,
+  .nav__backdrop,
+  .nav__panel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav,
+  .nav__panel,
+  .nav__backdrop,
+  .nav__burger-bar,
+  .nav__link::after {
+    transition: none;
+  }
+}

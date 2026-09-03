@@ -1,0 +1,278 @@
+.hero {
+  position: relative;
+  min-height: 100svh; /* svh: không bị nhảy khi thanh địa chỉ trên mobile ẩn/hiện */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  color: var(--white);
+  padding: 6rem 1.25rem 7rem;
+}
+
+/* Trình duyệt cũ chưa hiểu svh thì dùng vh */
+@supports not (min-height: 100svh) {
+  .hero {
+    min-height: 100vh;
+  }
+}
+
+/* ---------- Ảnh nền ---------- */
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  /* Phóng rất chậm tạo cảm giác ảnh "thở", không gây chóng mặt */
+  animation: hero-zoom 22s var(--ease) forwards;
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Lớp phủ làm dịu ảnh để chữ trắng luôn đọc rõ,
+   pha thêm chút hồng cho đúng tông floral */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(58, 42, 40, 0.42) 0%,
+      rgba(58, 42, 40, 0.24) 38%,
+      rgba(58, 42, 40, 0.52) 100%
+    ),
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(201, 139, 148, 0.18) 0%,
+      rgba(74, 61, 58, 0.42) 78%
+    );
+}
+
+/* ---------- Góc hoa trang trí ---------- */
+.hero__corner {
+  position: absolute;
+  z-index: 2;
+  width: clamp(120px, 22vw, 220px);
+  height: auto;
+  opacity: 0;
+  animation: hero-fade 1.6s var(--ease) 0.9s forwards;
+  pointer-events: none;
+}
+
+.hero__corner--tl {
+  top: clamp(0.75rem, 3vw, 2rem);
+  left: clamp(0.75rem, 3vw, 2rem);
+}
+
+.hero__corner--br {
+  right: clamp(0.75rem, 3vw, 2rem);
+  bottom: clamp(0.75rem, 3vw, 2rem);
+  transform: rotate(180deg);
+}
+
+/* ---------- Nội dung ---------- */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  max-width: 44rem;
+}
+
+/* Mỗi dòng hiện lên lệch nhau một nhịp, tạo cảm giác mở thiệp ra từ từ */
+.hero__eyebrow,
+.hero__names,
+.hero__tagline,
+.hero__rule,
+.hero__date {
+  opacity: 0;
+  animation: hero-rise 1.1s var(--ease) forwards;
+}
+
+.hero__eyebrow {
+  animation-delay: 0.25s;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  margin: 0 0 1.1rem;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 12px rgba(58, 42, 40, 0.45);
+}
+
+.hero__names {
+  animation-delay: 0.45s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 clamp(0.6rem, 2.4vw, 1.6rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8.5vw, 5.25rem);
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 26px rgba(58, 42, 40, 0.5);
+}
+
+.hero__amp {
+  font-family: var(--font-script);
+  font-size: 0.78em;
+  color: var(--blush-200);
+  font-weight: 500;
+}
+
+.hero__tagline {
+  animation-delay: 0.65s;
+  margin-top: 0.9rem;
+  font-family: var(--font-script);
+  font-size: clamp(1.5rem, 4.2vw, 2.2rem);
+  color: var(--blush-100);
+  text-shadow: 0 1px 14px rgba(58, 42, 40, 0.45);
+}
+
+/* Đường kẻ mảnh có bông hoa ở giữa */
+.hero__rule {
+  animation-delay: 0.85s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin: 1.6rem auto 1.3rem;
+}
+
+.hero__rule span {
+  height: 1px;
+  width: clamp(2.75rem, 13vw, 6rem);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.hero__date {
+  animation-delay: 1s;
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 2.2vw, 1.02rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 12px rgba(58, 42, 40, 0.45);
+}
+
+/* Chữ Nhật viết hoa và giãn chữ trông rời rạc, nên trả về bình thường */
+[lang='ja'] .hero__date {
+  text-transform: none;
+  letter-spacing: 0.1em;
+}
+
+[lang='ja'] .hero__eyebrow {
+  letter-spacing: 0.3em;
+}
+
+/* ---------- Gợi ý cuộn xuống ---------- */
+.hero__scroll {
+  position: absolute;
+  z-index: 3;
+  bottom: 1.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  animation: hero-fade 1.2s var(--ease) 1.5s forwards;
+}
+
+.hero__scroll-text {
+  font-size: 0.66rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+[lang='ja'] .hero__scroll-text {
+  text-transform: none;
+  letter-spacing: 0.18em;
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chấm sáng trượt xuống dọc đường kẻ, mời mắt nhìn xuống dưới */
+.hero__scroll-line::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: -40%;
+  height: 40%;
+  background: var(--white);
+  animation: hero-scroll-dot 2.4s var(--ease) infinite;
+}
+
+@keyframes hero-scroll-dot {
+  0% {
+    top: -40%;
+  }
+  60%,
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Người bật chế độ giảm chuyển động: bỏ hết animation, hiện thẳng nội dung */
+@media (prefers-reduced-motion: reduce) {
+  .hero__image,
+  .hero__corner,
+  .hero__eyebrow,
+  .hero__names,
+  .hero__tagline,
+  .hero__rule,
+  .hero__date,
+  .hero__scroll,
+  .hero__scroll-line::after {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__corner--br {
+    transform: rotate(180deg);
+  }
+
+  .hero__scroll {
+    transform: translateX(-50%);
+  }
+}

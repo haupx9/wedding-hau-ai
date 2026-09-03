@@ -1,0 +1,49 @@
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  /* Viền mảnh mờ đi một chút để không tranh chỗ với menu */
+  border-color: color-mix(in srgb, currentColor 32%, transparent);
+  flex: none;
+}
+
+/* Trình duyệt chưa hỗ trợ color-mix thì vẫn có viền, chỉ đậm hơn chút */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .lang-toggle {
+    border-color: var(--blush-200);
+  }
+}
+
+.lang-toggle__btn {
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  color: inherit;
+  opacity: 0.66;
+  white-space: nowrap;
+  transition: opacity 0.3s var(--ease), background-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+
+.lang-toggle__btn:hover {
+  opacity: 1;
+}
+
+.lang-toggle__btn.is-active {
+  opacity: 1;
+  background: var(--rose);
+  color: var(--white);
+}
+
+.lang-toggle__sep {
+  width: 1px;
+  height: 0.85rem;
+  background: currentColor;
+  opacity: 0.3;
+}

@@ -1,0 +1,152 @@
+/* ============================================================
+   CHÂN TRANG — nền nâu ấm, chữ kem
+   ============================================================ */
+
+.footer {
+  background: var(--ink);
+  color: var(--blush-50);
+  padding-block: clamp(3rem, 8vw, 5rem);
+  text-align: center;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__thanks {
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(251, 241, 238, 0.62);
+}
+
+[lang='ja'] .footer__thanks {
+  text-transform: none;
+  letter-spacing: 0.08em;
+  font-size: 0.86rem;
+}
+
+.footer__names {
+  margin-top: 0.9rem;
+  font-family: var(--font-script);
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
+  line-height: 1.15;
+  color: var(--white);
+}
+
+.footer__amp {
+  color: var(--blush-200);
+}
+
+/* Dải hoa lá kế thừa màu chữ của cha, chỉnh cho hợp nền tối */
+.footer .divider {
+  color: var(--sage);
+  margin-top: 1rem;
+}
+
+.footer__hashtag {
+  margin-top: 1.1rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  color: var(--blush-200);
+}
+
+/* ---------- Liên hệ ---------- */
+.footer__contact {
+  margin-top: clamp(2.25rem, 6vw, 3.25rem);
+  width: 100%;
+}
+
+.footer__contact-title {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(251, 241, 238, 0.7);
+}
+
+[lang='ja'] .footer__contact-title {
+  text-transform: none;
+  letter-spacing: 0.1em;
+  font-size: 0.95rem;
+}
+
+.footer__contact-list {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.25rem, 5vw, 3.5rem);
+}
+
+.footer__contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 8rem;
+}
+
+.footer__contact-role {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(251, 241, 238, 0.55);
+}
+
+[lang='ja'] .footer__contact-role {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+}
+
+.footer__contact-name {
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.footer__contact-phone {
+  color: var(--blush-200);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  transition: color 0.3s var(--ease);
+}
+
+.footer__contact-phone:hover {
+  color: var(--white);
+}
+
+/* ---------- Dòng cuối ---------- */
+.footer__meta {
+  margin-top: clamp(2.25rem, 6vw, 3rem);
+  padding-top: 1.5rem;
+  width: 100%;
+  border-top: 1px solid rgba(251, 241, 238, 0.14);
+  font-size: 0.76rem;
+  color: rgba(251, 241, 238, 0.55);
+}
+
+.footer__dot {
+  margin-inline: 0.5rem;
+}
+
+.footer__top {
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(251, 241, 238, 0.7);
+  transition: color 0.3s var(--ease);
+}
+
+.footer__top:hover {
+  color: var(--white);
+}
+
+[lang='ja'] .footer__top {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+}

@@ -1,0 +1,304 @@
+/* ============================================================
+   HỆ THỐNG THIẾT KẾ — phong cách "Floral lãng mạn"
+   Mọi màu sắc, font, khoảng cách đều khai báo tập trung ở đây.
+   Muốn đổi tông màu toàn site thì chỉ cần sửa các biến trong :root
+   ============================================================ */
+
+:root {
+  /* --- Bảng màu --- */
+  --cream: #fdf9f6; /* nền chính, trắng ngà ấm */
+  --cream-deep: #f7efe9; /* nền phụ, dùng xen kẽ giữa các section */
+  --blush-50: #fbf1ee;
+  --blush-100: #f5e0da;
+  --blush-200: #ebc9c1;
+  --rose: #c98b94; /* hồng phấn chủ đạo */
+  --rose-deep: #a96c77; /* hồng đậm, dùng cho nhấn mạnh */
+  --sage: #9cae8c; /* xanh lá cây nhạt, cân bằng với hồng */
+  --sage-deep: #6f8264;
+  --gold: #c9a86a; /* vàng đồng, dùng cho đường viền mảnh */
+  --ink: #4a3d3a; /* màu chữ chính, nâu ấm thay vì đen */
+  --ink-soft: #7d6d69; /* màu chữ phụ */
+  --white: #ffffff;
+
+  /* --- Font ---
+     Xếp font Việt trước, font Nhật sau. Trình duyệt tự động chọn theo
+     từng ký tự: chữ Việt lấy font đầu, chữ Nhật rơi xuống font Nhật.
+     Nhờ vậy không cần đổi CSS khi chuyển ngôn ngữ.                     */
+  --font-script: 'Dancing Script', 'Klee One', cursive;
+  --font-display: 'Playfair Display', 'Shippori Mincho', Georgia, serif;
+  --font-body: 'Be Vietnam Pro', 'Noto Sans JP', system-ui, sans-serif;
+
+  /* --- Khoảng cách & bo góc --- */
+  --space-section: clamp(4.5rem, 10vw, 8rem);
+  --container: 1140px;
+  --radius: 4px;
+
+  /* --- Chuyển động --- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 0.7s;
+}
+
+/* ------------------------------------------------------------
+   Reset gọn
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: var(--rose-deep);
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ------------------------------------------------------------
+   Bố cục dùng chung
+   ------------------------------------------------------------ */
+.container {
+  width: min(100% - 2.5rem, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--space-section);
+  position: relative;
+}
+
+.section--tinted {
+  background: var(--cream-deep);
+}
+
+/* ------------------------------------------------------------
+   Kiểu chữ dùng chung
+   ------------------------------------------------------------ */
+
+/* Dòng chữ viết tay nhỏ nằm trên tiêu đề, ví dụ "Câu chuyện của chúng tôi" */
+.eyebrow {
+  font-family: var(--font-script);
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  color: var(--rose);
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+/* Tiêu đề section */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4.4vw, 2.75rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Chữ Nhật không hợp với letter-spacing rộng và viết hoa,
+   nên khi đang ở tiếng Nhật thì trả về kiểu bình thường. */
+:lang(ja) .section-title,
+[lang='ja'] .section-title {
+  text-transform: none;
+  letter-spacing: 0.12em;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.lead {
+  max-width: 46ch;
+  margin-inline: auto;
+  color: var(--ink-soft);
+  margin-top: 1rem;
+}
+
+/* ------------------------------------------------------------
+   Dải hoa lá ngăn cách — vẽ bằng SVG nội tuyến, không dùng ảnh
+   ------------------------------------------------------------ */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin: 1.1rem auto 0;
+  color: var(--sage);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  height: 1px;
+  width: clamp(2.5rem, 12vw, 5.5rem);
+  background: linear-gradient(90deg, transparent, var(--blush-200));
+}
+
+.divider::after {
+  background: linear-gradient(270deg, transparent, var(--blush-200));
+}
+
+.divider svg {
+  flex: none;
+}
+
+/* ------------------------------------------------------------
+   Nút bấm
+   ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.1rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  transition: background-color 0.35s var(--ease), color 0.35s var(--ease),
+    border-color 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+[lang='ja'] .btn {
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-size: 0.88rem;
+}
+
+.btn--solid {
+  background: var(--rose);
+  color: var(--white);
+}
+
+.btn--solid:hover {
+  background: var(--rose-deep);
+  transform: translateY(-2px);
+}
+
+.btn--outline {
+  border: 1px solid var(--blush-200);
+  color: var(--ink);
+}
+
+.btn--outline:hover {
+  border-color: var(--rose);
+  color: var(--rose-deep);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ------------------------------------------------------------
+   Hiệu ứng hiện dần khi cuộn tới
+   Class `reveal` đặt sẵn ở trạng thái ẩn; JavaScript thêm class
+   `is-visible` khi phần tử lọt vào khung nhìn.
+   ------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Tôn trọng thiết lập "giảm chuyển động" của hệ điều hành:
+   người bị say chuyển động sẽ thấy nội dung tĩnh hoàn toàn. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Tiện ích
+   ------------------------------------------------------------ */
+
+/* Ẩn khỏi màn hình nhưng vẫn đọc được bằng trình đọc màn hình */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
