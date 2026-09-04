@@ -1,12 +1,14 @@
 import { useState } from 'react'
 
 import FloralDivider from '../components/FloralDivider.jsx'
-import { ui } from '../data/weddingConfig.js'
+import { ui, weddingConfig } from '../data/weddingConfig.js'
 import { useLang } from '../i18n/LanguageContext.jsx'
+import { submitRsvp } from '../lib/rsvpSubmit.js'
 import './RSVP.css'
 
-/* Khoá lưu trong localStorage. Bản demo này giữ phản hồi ngay trên
-   máy khách, chưa gửi đi đâu cả. */
+/* Bản sao để trong máy khách. Chỗ lưu chính là Google Sheet của chủ tiệc
+   (xem weddingConfig.rsvpForm); localStorage chỉ là lưới an toàn phòng khi
+   lúc gửi bị rớt mạng. */
 const STORAGE_KEY = 'wedding-rsvp'
 
 const EMPTY_FORM = {
@@ -16,6 +18,24 @@ const EMPTY_FORM = {
   guests: '1',
   side: 'groom',
   message: '',
+}
+
+/* Mã QR in riêng cho từng khách mang theo mã khách và tên của chính họ:
+   .../?g=K001&n=Nguy%E1%BB%85n%20V%C4%83n%20A#rsvp
+
+   Mã khách đi kèm phản hồi để khớp đúng dòng trong file danh sách; tên thì
+   điền sẵn vào ô cho khách đỡ phải gõ, và khách vẫn sửa được nếu muốn.
+   Khách vào bằng mã QR chung (không có tham số) thì mọi thứ vẫn như cũ. */
+function readInvite() {
+  try {
+    const params = new URLSearchParams(window.location.search)
+    return {
+      guestId: (params.get('g') || '').trim(),
+      guestName: (params.get('n') || '').trim(),
+    }
+  } catch {
+    return { guestId: '', guestName: '' }
+  }
 }
 
 /* Đọc danh sách phản hồi đã lưu. Ở chế độ ẩn danh hoặc khi trình duyệt
@@ -33,10 +53,15 @@ function readSaved() {
 export default function RSVP() {
   const { t } = useLang()
 
-  const [form, setForm] = useState(EMPTY_FORM)
+  /* Đọc một lần lúc dựng, không đọc lại mỗi lần vẽ lại màn hình. */
+  const [invite] = useState(readInvite)
+  const [form, setForm] = useState(() =>
+    invite.guestName ? { ...EMPTY_FORM, name: invite.guestName } : EMPTY_FORM,
+  )
   const [errors, setErrors] = useState({})
   /* null = chưa gửi; 'yes' | 'no' = đã gửi, dùng để chọn lời cảm ơn */
   const [submittedAs, setSubmittedAs] = useState(null)
+  const [isSending, setIsSending] = useState(false)
 
   const update = (field) => (event) => {
     const { value } = event.target
@@ -67,8 +92,9 @@ export default function RSVP() {
     return found
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    if (isSending) return
 
     const found = validate()
     setErrors(found)
@@ -80,6 +106,9 @@ export default function RSVP() {
     }
 
     const entry = {
+      /* Mã khách lấy từ mã QR riêng. Rỗng nghĩa là khách vào bằng mã QR
+         chung hoặc gõ tay địa chỉ — vẫn nhận phản hồi bình thường. */
+      guestId: invite.guestId,
       ...form,
       name: form.name.trim(),
       phone: form.phone.trim(),
@@ -89,29 +118,32 @@ export default function RSVP() {
       savedAt: new Date().toISOString(),
     }
 
-    /* ==========================================================
-       NỐI BACKEND THẬT Ở ĐÂY
-       ----------------------------------------------------------
-       Hiện tại phản hồi chỉ được ghi vào localStorage của trình duyệt.
-       Khi có máy chủ (hoặc Google Form / Sheet / Firebase...), thay
-       đoạn lưu bên dưới bằng lời gọi mạng, ví dụ:
+    /* Đẩy sang Google Form (đổ vào Google Sheet của chủ tiệc).
+       Chưa khai địa chỉ trong weddingConfig.rsvpForm thì hàm này không
+       gửi gì cả, phản hồi chỉ nằm lại trong máy khách. */
+    setIsSending(true)
+    const result = await submitRsvp(entry, weddingConfig.rsvpForm)
+    setIsSending(false)
 
-           await fetch('https://mien-cua-ban/api/rsvp', {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify(entry),
-           })
+    /* Gửi hỏng thì nói thật, không hiện lời cảm ơn giả. Chỉ báo lỗi khi
+       thật sự có nơi nhận: chưa cấu hình gì thì đây là bản demo, phản hồi
+       nằm lại trong máy khách theo đúng thiết kế. */
+    const hasEndpoint =
+      (typeof window !== 'undefined' && window.__RSVP_API__) || weddingConfig.rsvpForm.action
+    if (hasEndpoint && !result.sent) {
+      setErrors({ send: t(ui.rsvp.sendError) })
+      return
+    }
 
-       Nhớ chuyển handleSubmit thành hàm async, thêm trạng thái
-       "đang gửi" (đã có sẵn chữ ui.rsvp.submitting) và xử lý lỗi mạng.
-       ========================================================== */
+    /* Luôn giữ một bản trong máy khách. Gửi được thì đây là bản sao
+       phòng hờ; gửi hỏng thì đây là thứ duy nhất còn lại. */
     try {
       const saved = readSaved()
-      saved.push(entry)
+      saved.push({ ...entry, sent: result.sent })
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(saved))
     } catch {
-      /* Không lưu được (chế độ ẩn danh, hết dung lượng...) thì vẫn
-         hiện lời cảm ơn — khách không cần biết chuyện kỹ thuật này. */
+      /* Không lưu được (chế độ ẩn danh, hết dung lượng...) thì thôi,
+         khách không cần biết chuyện kỹ thuật này. */
     }
 
     setSubmittedAs(form.attending)
@@ -332,10 +364,17 @@ export default function RSVP() {
               </div>
 
               <div className="rsvp__actions">
-                <button type="submit" className="btn btn--solid">
-                  {t(ui.rsvp.submit)}
+                {errors.send && (
+                  <p className="rsvp__error rsvp__error--send" role="alert">
+                    {errors.send}
+                  </p>
+                )}
+                <button type="submit" className="btn btn--solid" disabled={isSending}>
+                  {t(isSending ? ui.rsvp.submitting : ui.rsvp.submit)}
                 </button>
-                <p className="rsvp__notice">{t(ui.rsvp.savedNotice)}</p>
+                <p className="rsvp__notice">
+                  {t(weddingConfig.rsvpForm.action ? ui.rsvp.savedNotice : ui.rsvp.demoNotice)}
+                </p>
               </div>
             </form>
           )}

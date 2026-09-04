@@ -200,6 +200,38 @@ export const weddingConfig = {
     ],
   },
 
+  /* Địa chỉ trang đang chạy. Dùng để sinh mã QR in lên thiệp. */
+  siteUrl: 'https://haupx9.github.io/wedding-hau-ai/',
+
+  /* ---------- Nơi nhận phản hồi xác nhận tham dự ----------
+
+     Phản hồi của khách được đẩy sang một Google Form, Google Form đổ vào
+     Google Sheet — bảng tính đó chính là danh sách khách của chủ tiệc.
+
+     Cách điền hai ô dưới đây:
+
+     1. `action` — mở Google Form ở chế độ điền thật (đường link /viewform),
+        đổi đuôi `/viewform` thành `/formResponse`. Ví dụ:
+        https://docs.google.com/forms/d/e/1FAIpQL.../formResponse
+
+     2. `fields` — mã của từng câu hỏi trong form đó. Mở link /viewform,
+        bấm chuột phải > Xem nguồn trang, tìm chuỗi `entry.` sẽ thấy các mã
+        dạng entry.123456789 theo đúng thứ tự câu hỏi.
+
+     Để trống `action` thì trang vẫn chạy bình thường: phản hồi chỉ lưu
+     trong trình duyệt của khách và KHÔNG ai nhận được. */
+  rsvpForm: {
+    action: '',
+    fields: {
+      name: '',      // Họ và tên
+      phone: '',     // Số điện thoại
+      attending: '', // Có tham dự không
+      guests: '',    // Số người đi cùng
+      side: '',      // Nhà trai / nhà gái
+      message: '',   // Lời nhắn
+    },
+  },
+
   /* ---------- Thông tin liên hệ hiện ở chân trang ---------- */
   contact: [
     { label: { vi: 'Chú rể', ja: '新郎' }, name: { vi: 'Hoàng Nam', ja: 'ホアン・ナム' }, phone: '0901 234 567' },
@@ -357,7 +389,17 @@ export const ui = {
     },
     optional: { vi: 'không bắt buộc', ja: '任意' },
     required: { vi: 'bắt buộc', ja: '必須' },
+    /* Hiện khi đã nối với Google Form — phản hồi thật sự gửi về chủ tiệc */
     savedNotice: {
+      vi: 'Thông tin của bạn chỉ được dùng để chúng mình chuẩn bị cho ngày cưới.',
+      ja: 'いただいた情報は、結婚式の準備のためだけに使用いたします。',
+    },
+    sendError: {
+      vi: 'Rất tiếc, chưa gửi được phản hồi của bạn. Bạn thử lại giúp mình nhé, hoặc nhắn trực tiếp cho cô dâu chú rể.',
+      ja: '申し訳ございません、お返事を送信できませんでした。もう一度お試しいただくか、新郎新婦へ直接ご連絡ください。',
+    },
+    /* Hiện khi weddingConfig.rsvpForm.action còn trống — chưa gửi đi đâu cả */
+    demoNotice: {
       vi: 'Bản demo này lưu phản hồi ngay trên trình duyệt của bạn, chưa gửi đi đâu cả.',
       ja: 'このデモ版では、回答はお使いのブラウザ内にのみ保存されます。',
     },

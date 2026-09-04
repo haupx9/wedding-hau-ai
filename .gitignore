@@ -4,3 +4,14 @@ dist/
 *.log
 .claude/
 .vite/
+REQUESTS.md
+
+# Dữ liệu cá nhân của khách mời — KHÔNG đẩy lên repo công khai
+danh-sach-khach.xlsx
+danh-sach-khach.csv
+print/guests.json
+print/qr/
+print/responses.jsonl
+print/_test.xlsx
+print/~$_test.xlsx
+__pycache__/
