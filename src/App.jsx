@@ -1,5 +1,6 @@
 import Footer from './components/Footer.jsx'
 import Navbar from './components/Navbar.jsx'
+import { useHashScroll } from './hooks/useHashScroll.js'
 import { useScrollReveal } from './hooks/useScrollReveal.js'
 import Countdown from './sections/Countdown.jsx'
 import Events from './sections/Events.jsx'
@@ -12,6 +13,7 @@ import Story from './sections/Story.jsx'
 
 export default function App() {
   useScrollReveal()
+  useHashScroll()
 
   return (
     <>

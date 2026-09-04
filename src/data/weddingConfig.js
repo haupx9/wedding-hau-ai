@@ -105,7 +105,7 @@ export const weddingConfig = {
         vi: 'Một buổi chiều mưa ở quán cà phê nhỏ trên đường Nguyễn Huệ. Chúng tôi ngồi chung bàn vì quán hết chỗ, rồi nói chuyện đến tận lúc quán đóng cửa.',
         ja: 'グエン・フエ通りの小さなカフェ、雨の降る午後でした。満席だったので相席になり、閉店時間まで話し込んでしまいました。',
       },
-      image: '/images/story-01.jpg',
+      image: './images/story-01.jpg',
     },
     {
       id: 'hen-ho',
@@ -115,7 +115,7 @@ export const weddingConfig = {
         vi: 'Đà Lạt, hai chiếc xe máy và một tấm bản đồ giấy bị ướt. Lạc đường suốt buổi sáng nhưng đó là lần đầu tiên cả hai biết mình muốn đi cùng nhau lâu hơn.',
         ja: 'ダラットへ。バイク2台と、濡れてしまった紙の地図。午前中ずっと道に迷いましたが、この先もずっと一緒に歩きたいと初めて思えた日でした。',
       },
-      image: '/images/story-03.jpg',
+      image: './images/story-03.jpg',
     },
     {
       id: 'cau-hon',
@@ -125,7 +125,7 @@ export const weddingConfig = {
         vi: 'Vẫn là quán cà phê ngày xưa, vẫn chiếc bàn góc ấy. Anh chỉ hỏi một câu rất ngắn, và em đã gật đầu trước cả khi anh nói hết.',
         ja: 'あの日と同じカフェの、同じ隅の席で。彼はほんの短い一言を口にし、言い終わる前に彼女は頷いていました。',
       },
-      image: '/images/story-02.jpg',
+      image: './images/story-02.jpg',
     },
     {
       id: 'dam-cuoi',
@@ -135,7 +135,7 @@ export const weddingConfig = {
         vi: 'Bảy năm kể từ buổi chiều mưa đó. Chúng tôi rất mong được gặp bạn trong ngày quan trọng nhất của mình.',
         ja: 'あの雨の午後から7年。私たちの一番大切な日に、あなたにお会いできることを楽しみにしています。',
       },
-      image: '/images/story-04.jpg',
+      image: './images/story-04.jpg',
     },
   ],
 
@@ -143,21 +143,21 @@ export const weddingConfig = {
      Thay ảnh thật: bỏ file vào public/images/ rồi sửa đường dẫn ở đây.
      `alt` là mô tả ảnh, giúp người khiếm thị và công cụ tìm kiếm.      */
   gallery: [
-    { src: '/images/gallery-01.jpg', alt: { vi: 'Cô dâu chú rể hôn nhau trong mưa cánh hoa', ja: '花びらの中でキスをする新郎新婦' } },
-    { src: '/images/gallery-02.jpg', alt: { vi: 'Cô dâu chú rể bên bờ biển với voan cưới dài', ja: '海辺で長いベールをまとう新郎新婦' } },
-    { src: '/images/gallery-03.jpg', alt: { vi: 'Ảnh trắng đen cô dâu chú rể dưới tấm voan', ja: 'ベールの下の新郎新婦（モノクロ）' } },
-    { src: '/images/gallery-04.jpg', alt: { vi: 'Cô dâu chú rể bên chiếc xe van cổ', ja: 'クラシックなワゴン車と新郎新婦' } },
-    { src: '/images/gallery-05.jpg', alt: { vi: 'Cô dâu chú rể nắm tay đi dưới hàng cọ', ja: 'ヤシの木の下で手をつなぐ新郎新婦' } },
-    { src: '/images/gallery-06.jpg', alt: { vi: 'Thả bóng bay cùng quan khách', ja: 'ゲストと一緒に風船を飛ばす様子' } },
-    { src: '/images/gallery-07.jpg', alt: { vi: 'Hai chiếc ghế cưới trang trí hoa bên hồ', ja: '湖のほとりの花で飾られた二脚の椅子' } },
-    { src: '/images/gallery-08.jpg', alt: { vi: 'Bàn tiệc dài trang trí hoa tươi', ja: '生花で飾られた長いテーブル' } },
+    { src: './images/gallery-01.jpg', alt: { vi: 'Cô dâu chú rể hôn nhau trong mưa cánh hoa', ja: '花びらの中でキスをする新郎新婦' } },
+    { src: './images/gallery-02.jpg', alt: { vi: 'Cô dâu chú rể bên bờ biển với voan cưới dài', ja: '海辺で長いベールをまとう新郎新婦' } },
+    { src: './images/gallery-03.jpg', alt: { vi: 'Ảnh trắng đen cô dâu chú rể dưới tấm voan', ja: 'ベールの下の新郎新婦（モノクロ）' } },
+    { src: './images/gallery-04.jpg', alt: { vi: 'Cô dâu chú rể bên chiếc xe van cổ', ja: 'クラシックなワゴン車と新郎新婦' } },
+    { src: './images/gallery-05.jpg', alt: { vi: 'Cô dâu chú rể nắm tay đi dưới hàng cọ', ja: 'ヤシの木の下で手をつなぐ新郎新婦' } },
+    { src: './images/gallery-06.jpg', alt: { vi: 'Thả bóng bay cùng quan khách', ja: 'ゲストと一緒に風船を飛ばす様子' } },
+    { src: './images/gallery-07.jpg', alt: { vi: 'Hai chiếc ghế cưới trang trí hoa bên hồ', ja: '湖のほとりの花で飾られた二脚の椅子' } },
+    { src: './images/gallery-08.jpg', alt: { vi: 'Bàn tiệc dài trang trí hoa tươi', ja: '生花で飾られた長いテーブル' } },
   ],
 
   /* ---------- Ảnh dùng ở các vị trí cố định ---------- */
   images: {
-    hero: '/images/hero.jpg',
-    eventsBackground: '/images/events-bg.jpg',
-    floral: '/images/floral.jpg',
+    hero: './images/hero.jpg',
+    eventsBackground: './images/events-bg.jpg',
+    floral: './images/floral.jpg',
   },
 
   /* ---------- Bản đồ ----------
@@ -185,7 +185,7 @@ export const weddingConfig = {
         side: { vi: 'Chú rể', ja: '新郎' },
         bank: { vi: 'Ngân hàng Vietcombank', ja: 'ベトコムバンク' },
         number: '0123456789',
-        /* Đặt ảnh mã QR vào public/images/ rồi điền đường dẫn, ví dụ '/images/qr-groom.png'.
+        /* Đặt ảnh mã QR vào public/images/ rồi điền đường dẫn, ví dụ './images/qr-groom.png'.
            Để trống thì website hiện ô chờ ảnh thay vì hiện ảnh vỡ. */
         qr: '',
       },
@@ -378,6 +378,21 @@ export const ui = {
     ownerLabel: { vi: 'Chủ tài khoản', ja: '口座名義' },
     bankLabel: { vi: 'Ngân hàng', ja: '銀行' },
     qrAlt: { vi: 'Mã QR chuyển khoản', ja: '送金用QRコード' },
+  },
+
+  /* --- Mã QR in lên thiệp giấy --- */
+  qr: {
+    title: { vi: 'Mã QR xác nhận tham dự', ja: 'ご出欠確認用QRコード' },
+    hint: {
+      vi: 'Quét mã để xác nhận tham dự. Bạn cũng có thể tải mã về để in lên thiệp cưới giấy.',
+      ja: 'QRコードを読み取ると、ご出欠のお返事ページが開きます。紙の招待状に印刷する場合は、下記からダウンロードしてください。',
+    },
+    downloadSvg: { vi: 'Tải SVG', ja: 'SVGをダウンロード' },
+    downloadPng: { vi: 'Tải PNG', ja: 'PNGをダウンロード' },
+    error: {
+      vi: 'Rất tiếc, chưa tạo được mã QR trên trình duyệt này. Bạn vui lòng dùng đường dẫn bên dưới nhé.',
+      ja: 'お使いのブラウザではQRコードを生成できませんでした。お手数ですが、下記のリンクをご利用ください。',
+    },
   },
 
   /* --- Chân trang --- */
