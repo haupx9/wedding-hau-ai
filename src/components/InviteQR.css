@@ -1,0 +1,76 @@
+/* ============================================================
+   MÃ QR XÁC NHẬN THAM DỰ
+   Một tấm thẻ trắng ở giữa trang, khung vàng mảnh bao quanh mã.
+   ============================================================ */
+
+.invite-qr__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 30rem;
+  margin-inline: auto;
+  padding: clamp(1.75rem, 5vw, 2.75rem) clamp(1.25rem, 4vw, 2.25rem);
+  background: var(--white);
+  border: 1px solid var(--blush-100);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 34px rgba(74, 61, 58, 0.06);
+}
+
+/* Khung vàng mảnh quanh mã, cùng ngôn ngữ trang trí với các thẻ khác.
+   Nền trắng bên trong là bắt buộc: máy quét cần nền sáng tương phản. */
+.invite-qr__frame {
+  padding: clamp(0.75rem, 2.5vw, 1.1rem);
+  background: var(--white);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  line-height: 0;
+}
+
+.invite-qr__image {
+  width: clamp(11rem, 46vw, 15rem);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  /* Mã QR là hình khối vuông: giữ cạnh sắc, không làm mượt khi phóng to */
+  image-rendering: pixelated;
+}
+
+/* Địa chỉ web viết ra bằng chữ, phòng khi khách không quét được
+   và muốn gõ tay vào trình duyệt. */
+.invite-qr__link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  word-break: break-all;
+  border-bottom: 1px solid var(--blush-200);
+  transition: color 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.invite-qr__link:hover {
+  color: var(--rose-deep);
+  border-color: var(--rose);
+}
+
+.invite-qr__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.invite-qr__error {
+  margin-top: 1.25rem;
+  color: var(--rose-deep);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Khi in trang web, ẩn nút bấm đi cho gọn — chỉ còn mã và địa chỉ */
+@media print {
+  .invite-qr__actions {
+    display: none;
+  }
+}
