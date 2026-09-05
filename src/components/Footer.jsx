@@ -33,12 +33,16 @@ export default function Footer() {
           <h2 className="footer__contact-title">{t(ui.footer.contactTitle)}</h2>
           <ul className="footer__contact-list">
             {contact.map((person) => (
-              <li className="footer__contact-item" key={person.phone}>
+              <li className="footer__contact-item" key={t(person.label)}>
                 <span className="footer__contact-role">{t(person.label)}</span>
                 <span className="footer__contact-name">{t(person.name)}</span>
-                <a className="footer__contact-phone" href={telHref(person.phone)}>
-                  {person.phone}
-                </a>
+                {/* Chưa có số thật thì không hiện gì — thà thiếu còn hơn để
+                    khách bấm gọi vào số của người lạ. */}
+                {person.phone && (
+                  <a className="footer__contact-phone" href={telHref(person.phone)}>
+                    {person.phone}
+                  </a>
+                )}
               </li>
             ))}
           </ul>

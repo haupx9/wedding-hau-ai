@@ -137,16 +137,22 @@ export default function Gift() {
                 <dd>{t(account.bank)}</dd>
 
                 <dt>{t(ui.gift.accountNumber)}</dt>
-                <dd className="gift__number">{account.number}</dd>
+                <dd className="gift__number">
+                  {account.number || t(ui.gift.pending)}
+                </dd>
               </dl>
 
-              <button
-                type="button"
-                className="btn btn--outline gift__copy"
-                onClick={() => handleCopy(account)}
-              >
-                {t(copiedId === account.id ? ui.gift.copied : ui.gift.copy)}
-              </button>
+              {/* Chưa có số thật thì không hiện nút sao chép — để tránh khách
+                  sao chép rồi chuyển tiền vào một con số vô nghĩa. */}
+              {account.number && (
+                <button
+                  type="button"
+                  className="btn btn--outline gift__copy"
+                  onClick={() => handleCopy(account)}
+                >
+                  {t(copiedId === account.id ? ui.gift.copied : ui.gift.copy)}
+                </button>
+              )}
 
               {/* Thông báo cho trình đọc màn hình biết đã sao chép xong */}
               <span className="visually-hidden" role="status">

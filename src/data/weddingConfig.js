@@ -11,10 +11,10 @@
 export const weddingConfig = {
   /* ---------- Cô dâu & chú rể ---------- */
   couple: {
-    /* TODO: điền họ và tên đầy đủ, tên bố mẹ thật khi có — hiện đang là placeholder */
+    /* TODO: tên bố mẹ hai bên vẫn là placeholder, chờ chủ tiệc cung cấp */
     groom: {
       shortName: { vi: 'Hậu', ja: 'ハウ' },
-      fullName: { vi: 'Hậu', ja: 'ハウ' },
+      fullName: { vi: 'Nguyễn Chung Hậu', ja: 'グエン チュン ハウ' },
       role: { vi: 'Chú rể', ja: '新郎' },
       parents: {
         father: { vi: 'Ông ...', ja: '...' },
@@ -27,7 +27,7 @@ export const weddingConfig = {
     },
     bride: {
       shortName: { vi: 'Ai', ja: '亜衣' },
-      fullName: { vi: 'Ai', ja: '亜衣' },
+      fullName: { vi: 'Torizuka Ai', ja: '鳥塚 亜衣' },
       role: { vi: 'Cô dâu', ja: '新婦' },
       parents: {
         father: { vi: 'Ông ...', ja: '...' },
@@ -181,20 +181,20 @@ export const weddingConfig = {
     accounts: [
       {
         id: 'groom',
-        owner: { vi: 'Nguyễn Hoàng Nam', ja: 'グエン・ホアン・ナム' },
+        owner: { vi: 'Nguyễn Chung Hậu', ja: 'グエン チュン ハウ' },
         side: { vi: 'Chú rể', ja: '新郎' },
         bank: { vi: 'Ngân hàng Vietcombank', ja: 'ベトコムバンク' },
-        number: '0123456789',
+        number: '',
         /* Đặt ảnh mã QR vào public/images/ rồi điền đường dẫn, ví dụ './images/qr-groom.png'.
            Để trống thì website hiện ô chờ ảnh thay vì hiện ảnh vỡ. */
         qr: '',
       },
       {
         id: 'bride',
-        owner: { vi: 'Lê Minh Anh', ja: 'レー・ミン・アイン' },
+        owner: { vi: 'Torizuka Ai', ja: '鳥塚 亜衣' },
         side: { vi: 'Cô dâu', ja: '新婦' },
         bank: { vi: 'Ngân hàng Techcombank', ja: 'テクコムバンク' },
-        number: '9876543210',
+        number: '',
         qr: '',
       },
     ],
@@ -247,8 +247,8 @@ export const weddingConfig = {
 
   /* ---------- Thông tin liên hệ hiện ở chân trang ---------- */
   contact: [
-    { label: { vi: 'Chú rể', ja: '新郎' }, name: { vi: 'Hoàng Nam', ja: 'ホアン・ナム' }, phone: '0901 234 567' },
-    { label: { vi: 'Cô dâu', ja: '新婦' }, name: { vi: 'Minh Anh', ja: 'ミン・アイン' }, phone: '0907 654 321' },
+    { label: { vi: 'Chú rể', ja: '新郎' }, name: { vi: 'Nguyễn Chung Hậu', ja: 'グエン チュン ハウ' }, phone: '' },
+    { label: { vi: 'Cô dâu', ja: '新婦' }, name: { vi: 'Torizuka Ai', ja: '鳥塚 亜衣' }, phone: '' },
   ],
 }
 
@@ -433,6 +433,7 @@ export const ui = {
     ownerLabel: { vi: 'Chủ tài khoản', ja: '口座名義' },
     bankLabel: { vi: 'Ngân hàng', ja: '銀行' },
     qrAlt: { vi: 'Mã QR chuyển khoản', ja: '送金用QRコード' },
+    pending: { vi: 'Đang cập nhật', ja: '準備中' },
   },
 
   /* --- Mã QR in lên thiệp giấy --- */
