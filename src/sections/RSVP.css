@@ -84,6 +84,18 @@
   transition: border-color 0.3s var(--ease), background-color 0.3s var(--ease);
 }
 
+/* Trên màn hình hẹp, ô nhập phải đủ 16px.
+
+   Safari trên iPhone tự phóng to cả trang khi khách chạm vào ô nhập có cỡ
+   chữ dưới 16px — trang nhảy, khách phải tự thu nhỏ lại mới đọc tiếp được.
+   Gần như toàn bộ khách quét mã QR bằng điện thoại nên đây là đường đi chính,
+   không phải trường hợp hiếm. */
+@media (max-width: 640px) {
+  .rsvp__input {
+    font-size: 16px;
+  }
+}
+
 .rsvp__input::placeholder {
   color: var(--ink-soft);
   opacity: 0.55;
