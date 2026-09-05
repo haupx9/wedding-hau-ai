@@ -13,7 +13,6 @@ const MENU = [
   { id: 'events', label: ui.nav.events },
   { id: 'map', label: ui.nav.map },
   { id: 'rsvp', label: ui.nav.rsvp },
-  { id: 'gift', label: ui.nav.gift },
 ]
 
 export default function Navbar() {
