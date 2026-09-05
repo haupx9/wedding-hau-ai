@@ -1,0 +1,44 @@
+# Chạy server nhận phản hồi như một dịch vụ hệ thống trên EC2.
+#
+# Nhờ vậy server tự chạy lại khi máy khởi động lại, và tự bật lại nếu
+# chẳng may bị sập lúc nửa đêm — không ai ngồi canh được.
+#
+# Cách cài (chạy trên EC2, xem HUONG-DAN-EC2.md để biết bối cảnh):
+#   sudo cp deploy/rsvp-api.service /etc/systemd/system/
+#   sudo nano /etc/systemd/system/rsvp-api.service   # sửa mã bí mật
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now rsvp-api
+#
+# Xem log:      sudo journalctl -u rsvp-api -f
+# Khởi động lại: sudo systemctl restart rsvp-api
+
+[Unit]
+Description=API nhan phan hoi xac nhan tham du dam cuoi
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/wedding
+ExecStart=/usr/bin/node scripts/server.mjs
+Restart=always
+RestartSec=5
+
+Environment=RSVP_MODE=api
+Environment=PORT=4000
+Environment=RSVP_ORIGIN=https://haupx9.github.io
+
+# ĐỔI chuỗi dưới đây thành mã bí mật của riêng bạn.
+# Sinh mã ngẫu nhiên bằng lệnh:  openssl rand -hex 32
+# Mã này là thứ duy nhất ngăn người lạ tải về toàn bộ tên và số điện thoại
+# khách của bạn. Phải giống hệt mã trong file .env.local ở máy bạn.
+Environment=RSVP_ADMIN_TOKEN=DOI_CHUOI_NAY_DI
+
+# Hạn chế bớt quyền, phòng khi server bị lỗi bảo mật
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target

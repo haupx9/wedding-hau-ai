@@ -6,8 +6,8 @@ import { useLang } from '../i18n/LanguageContext.jsx'
 import { submitRsvp } from '../lib/rsvpSubmit.js'
 import './RSVP.css'
 
-/* Bản sao để trong máy khách. Chỗ lưu chính là Google Sheet của chủ tiệc
-   (xem weddingConfig.rsvpForm); localStorage chỉ là lưới an toàn phòng khi
+/* Bản sao để trong máy khách. Chỗ lưu chính là máy chủ nhận phản hồi
+   (xem weddingConfig.rsvpApi); localStorage chỉ là lưới an toàn phòng khi
    lúc gửi bị rớt mạng. */
 const STORAGE_KEY = 'wedding-rsvp'
 
@@ -118,18 +118,20 @@ export default function RSVP() {
       savedAt: new Date().toISOString(),
     }
 
-    /* Đẩy sang Google Form (đổ vào Google Sheet của chủ tiệc).
-       Chưa khai địa chỉ trong weddingConfig.rsvpForm thì hàm này không
-       gửi gì cả, phản hồi chỉ nằm lại trong máy khách. */
+    /* Gửi về máy chủ nhận phản hồi. Chưa khai địa chỉ nào trong
+       weddingConfig.rsvpApi thì hàm này không gửi đi đâu cả, phản hồi
+       chỉ nằm lại trong máy khách. */
     setIsSending(true)
-    const result = await submitRsvp(entry, weddingConfig.rsvpForm)
+    const result = await submitRsvp(entry, weddingConfig.rsvpForm, weddingConfig.rsvpApi)
     setIsSending(false)
 
     /* Gửi hỏng thì nói thật, không hiện lời cảm ơn giả. Chỉ báo lỗi khi
        thật sự có nơi nhận: chưa cấu hình gì thì đây là bản demo, phản hồi
        nằm lại trong máy khách theo đúng thiết kế. */
     const hasEndpoint =
-      (typeof window !== 'undefined' && window.__RSVP_API__) || weddingConfig.rsvpForm.action
+      (typeof window !== 'undefined' && window.__RSVP_API__) ||
+      weddingConfig.rsvpApi.url ||
+      weddingConfig.rsvpForm.action
     if (hasEndpoint && !result.sent) {
       setErrors({ send: t(ui.rsvp.sendError) })
       return
@@ -373,7 +375,11 @@ export default function RSVP() {
                   {t(isSending ? ui.rsvp.submitting : ui.rsvp.submit)}
                 </button>
                 <p className="rsvp__notice">
-                  {t(weddingConfig.rsvpForm.action ? ui.rsvp.savedNotice : ui.rsvp.demoNotice)}
+                  {t(
+                    weddingConfig.rsvpApi.url || weddingConfig.rsvpForm.action
+                      ? ui.rsvp.savedNotice
+                      : ui.rsvp.demoNotice,
+                  )}
                 </p>
               </div>
             </form>

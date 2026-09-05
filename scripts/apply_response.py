@@ -132,7 +132,12 @@ def main():
         if not cell(row, 'Họ và tên') and r.get('name'):
             put(row, 'Họ và tên', r['name'])
 
-        put(row, 'Phản hồi', 'Có' if r.get('attending') == 'yes' else 'Không')
+        # Thiếu hẳn trường này thì để trống, KHÔNG mặc định là "Không".
+        # Ghi bừa "Không" nghĩa là báo khách từ chối trong khi thật ra không
+        # biết — đếm thiếu mâm cỗ còn tệ hơn là để trống cho bạn tự hỏi lại.
+        attending = r.get('attending')
+        if attending in ('yes', 'no'):
+            put(row, 'Phản hồi', 'Có' if attending == 'yes' else 'Không')
         put(row, 'Số người đến', r.get('guests', ''))
         put(row, 'Lời nhắn', r.get('message', ''))
         put(row, 'Ngày phản hồi', r.get('savedAt', ''))

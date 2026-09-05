@@ -11,7 +11,11 @@
     "server": "node scripts/server.mjs",
     "khach:init": "python scripts/guests.py init",
     "qr:khach": "python scripts/guests.py export && node scripts/make-guest-qr.mjs",
-    "sync": "python scripts/apply_response.py"
+    "sync": "python scripts/apply_response.py",
+    "sync:remote": "node scripts/sync-remote.mjs",
+    "dynamo:retry": "node scripts/dynamo-retry.mjs",
+    "sync:dynamo": "node scripts/sync-dynamo.mjs",
+    "qr:s3": "node scripts/upload-qr-s3.mjs"
   },
   "dependencies": {
     "react": "18.3.1",

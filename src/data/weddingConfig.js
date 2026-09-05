@@ -203,6 +203,19 @@ export const weddingConfig = {
   /* Địa chỉ trang đang chạy. Dùng để sinh mã QR in lên thiệp. */
   siteUrl: 'https://haupx9.github.io/wedding-hau-ai/',
 
+  /* ---------- Địa chỉ API nhận phản hồi ----------
+
+     Điền vào đây khi máy chủ EC2 đã chạy, ví dụ:
+       url: 'https://rsvp.ten-mien-cua-ban.com/api/rsvp'
+
+     BẮT BUỘC phải là https. Trang chạy https nên trình duyệt chặn thẳng
+     việc gọi API http, khách sẽ không gửi được gì.
+
+     Để trống thì trang không gọi API nào — phản hồi chỉ nằm trong máy khách. */
+  rsvpApi: {
+    url: '',
+  },
+
   /* ---------- Nơi nhận phản hồi xác nhận tham dự ----------
 
      Phản hồi của khách được đẩy sang một Google Form, Google Form đổ vào

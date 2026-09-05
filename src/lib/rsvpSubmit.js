@@ -73,8 +73,12 @@ async function sendToApi(entry, url) {
      { sent: true, confirmed: true }  — máy chủ xác nhận đã ghi (đường API)
      { sent: true }                   — đã đẩy đi nhưng không biết kết quả (đường Google Form)
      { sent: false, reason: '...' }   — chưa cấu hình, mất mạng, hoặc quá hạn chờ  */
-export async function submitRsvp(entry, config) {
-  const api = localApiUrl()
+export async function submitRsvp(entry, config, apiConfig) {
+  /* Thứ tự ưu tiên:
+     1. Server đang phục vụ chính trang này (lúc thử tại máy chủ tiệc)
+     2. Địa chỉ API cấu hình sẵn (máy chủ EC2)
+     3. Google Form (nếu có ngày cần tới) */
+  const api = localApiUrl() || (apiConfig && apiConfig.url) || ''
   if (api) return sendToApi(entry, api)
 
   if (!config || !config.action) {

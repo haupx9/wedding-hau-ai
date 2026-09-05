@@ -15,3 +15,6 @@ print/responses.jsonl
 print/_test.xlsx
 print/~$_test.xlsx
 __pycache__/
+
+# Cấu hình riêng, chứa mã bí mật — KHÔNG đẩy lên GitHub
+.env.local
