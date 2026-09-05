@@ -51,8 +51,12 @@ Vùng nên chọn `ap-northeast-1` (Tokyo) cho gần khách ở Nhật.
 ```bash
 aws dynamodb create-table \
   --table-name wedding-responses \
-  --attribute-definitions AttributeName=savedAt,AttributeType=S \
-  --key-schema AttributeName=savedAt,KeyType=HASH \
+  --attribute-definitions \
+      AttributeName=guestId,AttributeType=S \
+      AttributeName=responseKey,AttributeType=S \
+  --key-schema \
+      AttributeName=guestId,KeyType=HASH \
+      AttributeName=responseKey,KeyType=RANGE \
   --billing-mode PAY_PER_REQUEST \
   --region ap-northeast-1
 
@@ -63,6 +67,15 @@ aws dynamodb create-table \
   --billing-mode PAY_PER_REQUEST \
   --region ap-northeast-1
 ```
+
+**Bảng phản hồi dùng khoá kép** — `guestId` phân vùng, `responseKey` sắp xếp.
+DynamoDB **không cho đổi khoá sau khi bảng đã tạo**; muốn đổi phải xoá làm
+lại, mà lúc đó dữ liệu khách đã nằm trong đó. Nên phải đúng ngay từ đầu.
+
+`responseKey` có dạng `2027-01-15T09:22:31.482Z#a3f9` — thời điểm gửi cộng
+mấy ký tự ngẫu nhiên. Thời điểm đứng đầu nên danh sách tự sắp theo thứ tự
+thời gian; phần ngẫu nhiên để hai phản hồi trùng nhau tới mili giây không
+ghi đè lên nhau.
 
 `PAY_PER_REQUEST` nghĩa là trả theo lượt dùng — với 50 khách thì gần như
 không mất tiền, và không phải đoán trước công suất.

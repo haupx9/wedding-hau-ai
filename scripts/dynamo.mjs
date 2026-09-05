@@ -8,8 +8,8 @@
    100–300 mili giây. Với 50 khách và vài trăm lượt gọi thì không đáng kể.
 
    Hai bảng:
-     wedding-guests     khoá chính: guestId  (danh sách khách)
-     wedding-responses  khoá chính: savedAt  (phản hồi, mỗi lần gửi một dòng)
+     wedding-guests     khoá chính: guestId
+     wedding-responses  khoá kép:   guestId (phân vùng) + responseKey (sắp xếp)
 
    Cấu hình bằng biến môi trường:
      RSVP_TABLE_GUESTS     mặc định wedding-guests
@@ -17,6 +17,7 @@
      AWS_REGION            ví dụ ap-northeast-1 */
 
 import { spawn } from 'node:child_process'
+import { randomBytes } from 'node:crypto'
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, sep } from 'node:path'
@@ -111,11 +112,67 @@ function fromItem(item) {
 
 /* ---- Ghi ---- */
 
-export async function putResponse(record) {
-  await runAwsWithInput(['dynamodb', 'put-item'], {
-    TableName: TABLE_RESPONSES,
-    Item: toItem(record),
-  })
+/* Khách vào bằng mã QR chung thì không có mã khách. DynamoDB không nhận
+   khoá rỗng, nên gom hết vào một phân vùng riêng. */
+const ANON = 'ANON'
+
+/* Khoá sắp xếp: thời điểm gửi cộng thêm mấy ký tự ngẫu nhiên.
+
+   Vì sao không dùng thẳng thời điểm gửi: hai phản hồi trùng nhau tới mili
+   giây sẽ có cùng khoá, và PutItem của DynamoDB thì GHI ĐÈ không báo gì —
+   mất một phản hồi mà không ai biết. Thêm phần ngẫu nhiên là trùng nhau
+   gần như không thể.
+
+   Vẫn giữ thời điểm ở đầu chuỗi để danh sách tự sắp theo thứ tự thời gian
+   và đọc bằng mắt vẫn hiểu được. */
+function makeResponseKey(savedAt) {
+  return `${savedAt}#${randomBytes(3).toString('hex')}`
+}
+
+/* Ghi một phản hồi.
+
+   Hai lớp bảo vệ, không cần file dự phòng nào:
+
+   1. Ghi có điều kiện — nếu khoá đã tồn tại thì DynamoDB TỪ CHỐI thay vì ghi
+      đè. Lỗi ồn ào còn hơn mất dữ liệu im lặng. Gặp trùng thì sinh khoá mới
+      rồi thử lại.
+
+   2. Thử lại khi trục trặc thoáng qua — mạng chớp, AWS nghẽn nhất thời sẽ
+      tự khỏi. Chỉ khi hỏng thật mới chịu thua và báo lên trên. */
+export async function putResponse(record, { retries = 3 } = {}) {
+  const savedAt = record.savedAt || new Date().toISOString()
+  let lastError = null
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    const item = toItem({
+      ...record,
+      guestId: record.guestId || ANON,
+      savedAt,
+      responseKey: makeResponseKey(savedAt),
+    })
+
+    try {
+      await runAwsWithInput(['dynamodb', 'put-item'], {
+        TableName: TABLE_RESPONSES,
+        Item: item,
+        /* Chỉ ghi khi chưa có dòng nào mang khoá này. */
+        ConditionExpression: 'attribute_not_exists(responseKey)',
+      })
+      return { savedAt, responseKey: item.responseKey.S }
+    } catch (error) {
+      lastError = error
+
+      /* Trùng khoá: vòng sau sinh phần ngẫu nhiên khác, thử lại ngay. */
+      if (String(error.message).includes('ConditionalCheckFailed')) continue
+
+      /* Trục trặc khác: chờ một chút rồi thử lại, lần sau chờ lâu hơn. */
+      if (attempt < retries - 1) {
+        await new Promise((r) => setTimeout(r, 300 * 2 ** attempt))
+      }
+    }
+  }
+
+  throw lastError || new Error('không ghi được vào DynamoDB')
 }
 
 export async function putGuest(guest) {

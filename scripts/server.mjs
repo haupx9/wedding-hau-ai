@@ -47,6 +47,14 @@ const USE_DYNAMO = process.env.RSVP_STORE === 'dynamodb'
    AWS trục trặc là mất luôn phản hồi của khách mà không ai biết. */
 const PENDING = join(ROOT, 'print', 'dynamo-pending.jsonl')
 
+/* Đặt RSVP_LOCAL_FILE=0 để bỏ hẳn bản ghi ra file, chỉ dùng DynamoDB.
+
+   Đánh đổi: mất lưới an toàn. Nhưng DynamoDB đã có ghi-có-điều-kiện và tự
+   thử lại 3 lần, nên hỏng tới mức đó thường là hỏng thật (hết quyền, sai tên
+   bảng) chứ không phải trục trặc thoáng qua. Lúc ấy server báo lỗi thật cho
+   khách để họ gửi lại, thay vì nhận bừa rồi đánh mất. */
+const USE_LOCAL_FILE = process.env.RSVP_LOCAL_FILE !== '0'
+
 /* Trang nào được phép gọi API này. Mặc định là trang cưới trên GitHub Pages. */
 const ALLOWED_ORIGIN = process.env.RSVP_ORIGIN || 'https://haupx9.github.io'
 
@@ -234,10 +242,11 @@ const server = createServer(async (req, res) => {
         savedAt: new Date().toISOString(),
       }
 
-      /* Ghi ra file trước, luôn luôn. Đây là thao tác nhanh và gần như không
-         hỏng bao giờ, nên phản hồi của khách coi như đã an toàn ngay lúc này
-         — kể cả khi AWS đang trục trặc. */
-      appendFileSync(RESPONSES, JSON.stringify(record) + '\n', 'utf8')
+      /* Ghi ra file trước. Thao tác nhanh và gần như không hỏng bao giờ, nên
+         phản hồi coi như an toàn ngay lúc này, kể cả khi AWS đang trục trặc. */
+      if (USE_LOCAL_FILE) {
+        appendFileSync(RESPONSES, JSON.stringify(record) + '\n', 'utf8')
+      }
 
       console.log(
         `\n[${new Date().toLocaleTimeString()}] Phản hồi mới: ` +
@@ -250,11 +259,20 @@ const server = createServer(async (req, res) => {
           await putResponse(record)
           console.log('   đã ghi vào DynamoDB')
         } catch (error) {
-          /* Không để khách chịu hậu quả của việc AWS trục trặc: phản hồi đã
-             nằm trong file rồi, cứ báo thành công. Nhưng phải xếp vào hàng
-             chờ để đẩy lại, nếu không thì mất âm thầm. */
-          appendFileSync(PENDING, JSON.stringify(record) + '\n', 'utf8')
           console.error('   GHI DYNAMODB HỎNG:', error.message)
+
+          if (!USE_LOCAL_FILE) {
+            /* Không còn lưới an toàn nào: phải nói thật là chưa nhận được, để
+               khách gửi lại. Nhận bừa rồi đánh mất mới là tệ nhất. */
+            console.error('   Đã báo lỗi cho khách để họ gửi lại.')
+            res.writeHead(503, { ...JSON_HEADERS, ...corsHeaders() })
+            res.end(JSON.stringify({ ok: false, error: 'chưa lưu được, bạn thử lại giúp' }))
+            return
+          }
+
+          /* Còn file thì phản hồi đã an toàn: báo thành công, nhưng xếp vào
+             hàng chờ để đẩy lại — không thì mất âm thầm. */
+          appendFileSync(PENDING, JSON.stringify(record) + '\n', 'utf8')
           console.error('   Đã xếp vào hàng chờ. Đẩy lại bằng: npm run dynamo:retry')
         }
       }
