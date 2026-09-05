@@ -15,7 +15,8 @@
     "sync:remote": "node scripts/sync-remote.mjs",
     "dynamo:retry": "node scripts/dynamo-retry.mjs",
     "sync:dynamo": "node scripts/sync-dynamo.mjs",
-    "qr:s3": "node scripts/upload-qr-s3.mjs"
+    "qr:s3": "node scripts/upload-qr-s3.mjs",
+    "qr:in": "node scripts/make-print-qr.mjs"
   },
   "dependencies": {
     "react": "18.3.1",

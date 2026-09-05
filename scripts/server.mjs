@@ -47,13 +47,15 @@ const USE_DYNAMO = process.env.RSVP_STORE === 'dynamodb'
    AWS trục trặc là mất luôn phản hồi của khách mà không ai biết. */
 const PENDING = join(ROOT, 'print', 'dynamo-pending.jsonl')
 
-/* Đặt RSVP_LOCAL_FILE=0 để bỏ hẳn bản ghi ra file, chỉ dùng DynamoDB.
+/* Mặc định KHÔNG ghi ra file — DynamoDB là nơi lưu duy nhất.
 
-   Đánh đổi: mất lưới an toàn. Nhưng DynamoDB đã có ghi-có-điều-kiện và tự
-   thử lại 3 lần, nên hỏng tới mức đó thường là hỏng thật (hết quyền, sai tên
-   bảng) chứ không phải trục trặc thoáng qua. Lúc ấy server báo lỗi thật cho
-   khách để họ gửi lại, thay vì nhận bừa rồi đánh mất. */
-const USE_LOCAL_FILE = process.env.RSVP_LOCAL_FILE !== '0'
+   DynamoDB đã có ghi-có-điều-kiện và tự thử lại 3 lần, nên hỏng tới mức chịu
+   thua thường là hỏng thật (hết quyền, sai tên bảng) chứ không phải trục trặc
+   thoáng qua. Lúc ấy server báo lỗi thật cho khách để họ gửi lại, thay vì
+   nhận bừa rồi đánh mất.
+
+   Đặt RSVP_LOCAL_FILE=1 nếu muốn bật lại lưới an toàn bằng file. */
+const USE_LOCAL_FILE = process.env.RSVP_LOCAL_FILE === '1'
 
 /* Trang nào được phép gọi API này. Mặc định là trang cưới trên GitHub Pages. */
 const ALLOWED_ORIGIN = process.env.RSVP_ORIGIN || 'https://haupx9.github.io'

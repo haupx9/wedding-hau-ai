@@ -19,6 +19,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { encodeQR } from '../src/lib/qrcode.js'
+import { qrToPngBuffer } from '../src/lib/pngEncode.js'
 import { qrToSvgString } from '../src/lib/qrRender.js'
 import { weddingConfig } from '../src/data/weddingConfig.js'
 
@@ -61,14 +62,24 @@ for (const guest of guests) {
     title: `Mã QR xác nhận tham dự — ${guest.name}`,
   })
 
-  const file = join(OUT_DIR, `${guest.id}.svg`)
-  writeFileSync(file, svg, 'utf8')
-  index.push({ id: guest.id, name: guest.name, url, file: `print/qr/${guest.id}.svg` })
+  writeFileSync(join(OUT_DIR, `${guest.id}.svg`), svg, 'utf8')
+
+  /* Kèm bản PNG: SVG đẹp cho nhà in nhưng nhiều máy và ứng dụng không mở
+     được để xem trước, còn PNG thì ở đâu cũng mở được. */
+  writeFileSync(join(OUT_DIR, `${guest.id}.png`), qrToPngBuffer(qr, { size: 1200 }))
+
+  index.push({
+    id: guest.id,
+    name: guest.name,
+    url,
+    svg: `print/qr/${guest.id}.svg`,
+    png: `print/qr/${guest.id}.png`,
+  })
 }
 
 writeFileSync(join(OUT_DIR, 'index.json'), JSON.stringify(index, null, 2), 'utf8')
 
-console.log(`Đã sinh ${index.length} mã QR vào print/qr/`)
+console.log(`Đã sinh ${index.length} mã QR (mỗi khách một SVG và một PNG) vào print/qr/`)
 for (const item of index) {
   console.log(`  ${item.id}  ${item.name}  →  ${item.url}`)
 }

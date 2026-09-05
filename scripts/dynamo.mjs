@@ -29,6 +29,11 @@ export const TABLE_RESPONSES = process.env.RSVP_TABLE_RESPONSES || 'wedding-resp
    chạy thử mà không muốn đụng vào AWS thật. */
 const AWS_BIN = process.env.AWS_CLI_PATH || 'aws'
 
+/* Trỏ vào DynamoDB chạy ngay trên máy để thử mà không đụng AWS thật:
+     RSVP_DDB_ENDPOINT=http://localhost:8000
+   Bỏ trống thì gọi DynamoDB thật trên AWS. */
+const ENDPOINT = process.env.RSVP_DDB_ENDPOINT || ''
+
 /* Truyền tham số JSON qua FILE chứ không nhét thẳng vào dòng lệnh.
 
    Lý do: lời nhắn của khách có thể chứa dấu nháy, xuống dòng, tiếng Việt có
@@ -50,8 +55,10 @@ async function runAwsWithInput(baseArgs, input) {
 }
 
 function runAws(args) {
+  const full = ENDPOINT ? [...args, '--endpoint-url', ENDPOINT] : args
+
   return new Promise((resolve, reject) => {
-    const child = spawn(AWS_BIN, args, {
+    const child = spawn(AWS_BIN, full, {
       stdio: ['ignore', 'pipe', 'pipe'],
       shell: process.platform === 'win32',
     })
